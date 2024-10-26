@@ -5,9 +5,11 @@
 , git
 , pkg-config
 , openssl
+, erlangVersion ? null
 , Security
 , nix-update-script
 , SystemConfiguration
+, pkgs
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ git pkg-config ];
 
   buildInputs = [ openssl ] ++
+    (if erlangVersion == null then [ pkgs.erlang_26  ] else [ erlangVersion ]) ++
     lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   cargoHash = "sha256-B8tCVkubP04gAHKQC0idR5AjpVHG/kCXvPCfwKCuaSo=";
